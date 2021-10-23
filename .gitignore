@@ -1,0 +1,7 @@
+__pycache__
+test.*
+*.env
+*.pdf
+.vscode
+/PdfConvertorBot/convertor/files/*.txt
+fibanacci.txt
