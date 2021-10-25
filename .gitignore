@@ -4,4 +4,5 @@ test.*
 *.pdf
 .vscode
 /PdfConvertorBot/convertor/files/*.txt
-fibanacci.txt
+*.session
+*.session-journal

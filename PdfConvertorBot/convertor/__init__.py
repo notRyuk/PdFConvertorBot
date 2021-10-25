@@ -40,7 +40,7 @@ from pdfminer.pdfdocument import PDFDocument
 #             pix1 = None
 #         pix = None
 
-return_html = """
+RETURN_HTML = """
 <html>
 <style>
 html, body {
@@ -83,7 +83,7 @@ class PdfDoc:
             raise FileNotFoundError("The mentioned file is not existing.")
         self.codec = "utf-8"
     
-    def get_page_text_list(self) -> Optional[list[str]]:
+    async def get_page_text_list(self) -> Optional[list[str]]:
         if not self.is_file:
             return None
         resource_manager = PDFResourceManager()
@@ -124,7 +124,7 @@ class PdfDoc:
             count += 1
         return count
 
-    def get_page_text(self, page_number: int) -> Optional[str]:
+    async def get_page_text(self, page_number: int) -> Optional[str]:
         "Page number starts from 1"
         if not self.is_file:
             return None
@@ -151,7 +151,7 @@ class PdfDoc:
         _io.close()
         return return_str
 
-    def get_details(self):
+    async def get_details(self):
         parser = PDFParser(open(self.pdf_path, "rb"))
         pdf_doc = PDFDocument(parser, self.pdf_pass, caching = True)
         codec = codecs.BOM_UTF16_BE
@@ -168,10 +168,11 @@ class PdfDoc:
         doc = fitz.open(cls.pdf_path)
         return doc.get_toc()
     
-    def convert_html(self) -> Optional[PathLike@AnyStr]:
+    async def convert_to_html(self) -> Optional[str]:
         doc = fitz.open(self.pdf_path)
+        return_html = RETURN_HTML
         for i in range(len(doc)):
-            return_html = return_html + doc.get_page_text(i, option = "html")
+            return_html += doc.get_page_text(i, option = "html")
         return_html += "</body></html>"
         try:
             open(self.pdf_path[:-3]+"html", "w").write(return_html)
